@@ -1,0 +1,131 @@
+<!-- <app-home></app-home> -->
+<form id="f" (ngSubmit)="save();" #myform="ngForm">
+  
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your Tz</mat-label>
+    <input matInput placeholder="Tz" name="id " [(ngModel)]="user.Tz" required minlength="9" maxlength="9"
+      #tz="ngModel" title="הזן 9 תווים">
+    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+  </mat-form-field><br>
+  <div class="errors" *ngIf="tz.touched&&tz.errors&&tz.errors['required']">זהו שדה חובה</div>
+  <div class="errors" *ngIf="tz.invalid && (tz.dirty || tz.touched)">תעודת זהות יכולה להכיל ספרות בלבד</div>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your first name</mat-label>
+    <input matInput placeholder={{user.FName}} name="name" [(ngModel)]="user.FName" #f="ngModel"
+      pattern="[a-zA-Z]*" required>
+    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+  </mat-form-field><br>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your last name</mat-label>
+    <input matInput placeholder={{user.LName}} [(ngModel)]="user.LName" name="LName" required />
+    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+  </mat-form-field><br>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your birth date</mat-label>
+    <input matInput placeholder={{user.BirthDate}} name="birthDate" [(ngModel)]="user.BirthDate" type="date" required>
+
+    <input matInput [matDatepicker]="picker">
+    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field><br>
+  <mat-form-field appearance="fill">
+    <mat-label>Select Gender</mat-label>
+    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+    <mat-select [(ngModel)]="user.Gander" name="gander" required>
+      <mat-option value="1">Male</mat-option>
+      <mat-option value="2">Female</mat-option>
+    </mat-select>
+  </mat-form-field><br>
+  <br />
+  <mat-form-field appearance="fill">
+    <mat-label>Select health maintenance organization</mat-label>
+    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+    <mat-select [(ngModel)]="user.HMO" name="hmo" required>
+      <mat-option value="1">Clalit</mat-option>
+      <mat-option value="2">Maccabi</mat-option>
+      <mat-option value="8">Meuchedet</mat-option>
+      <mat-option value="16">Leumit</mat-option>
+    </mat-select>
+  </mat-form-field><br>
+  <input type="button" value="Add a child" ChildName required pattern="[a-zA-Z ]*" (click)="addChild()" />
+  <p>The children</p>
+  <br />
+
+  <div *ngIf="flag">
+    <mat-form-field appearance="outline">
+      <mat-label>Enter your id</mat-label>
+      <input matInput [(ngModel)]="children.ChildTz" name="{{children.ChildTz}" pattern="[0-9]{9}"
+        #IdChild  required>
+      <mat-icon matSuffix>dialpad</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter your first name</mat-label>
+      <input matInput [(ngModel)]="children.Name" name="{{children.Name}" pattern="[a-zA-Z]*" #ChildName required>
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+    <!-- <mat-form-field appearance="outline">
+      <mat-label>Enter your birth date</mat-label>
+      <input matInput placeholder={{children.BirthDate}} name="{{child.birthDate}"  [(ngModel)]= {{children.BirthDate}}    type="date" #DateChild req
+        required>
+      <mat-icon matSuffix>calendar_month</mat-icon>
+    </mat-form-field> -->
+
+    <!-- <mat-form-field appearance="outline">
+      <mat-label>Enter your birth date</mat-label>
+      <input matInput placeholder={{user.BirthDate}} name="birthDate" [(ngModel)]="user.BirthDate" type="date" required>
+  
+      <input matInput [matDatepicker]="picker">
+       <mat-hint>MM/DD/YYYY</mat-hint> -->
+      <!-- <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field><br> --> 
+    <input type="button" value="עדכון הילד" (click)="saveChildren()" />
+    <div class="example-button-container">
+      <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" type="button"
+        (click)="addChild()">
+        <mat-icon>plus_one</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+  <button mat-stroked-button color="primary" type="submit" [disabled]="!myform.valid ">Submit
+      </button>
+      <button mat-raised-button matTooltip="Download all the users to exel document"
+          aria-label="Button that displays a tooltip when focused or hovered over" (click)="downLoadToExel()">
+          export to exel
+      </button>
+</form>
+<!-- <table id="excel-table"></table>
+<table>
+  <tr>
+    <th>Id</th>
+    <th>FirstName</th>
+    <th>LastName</th>
+    <th>BirthDate</th>
+    <th>Gender</th>
+    <th>HMO</th>
+  </tr>
+  <tr>
+<td>{{user.Id}}</td>
+<td>{{user.FName}}</td>
+<td>{{user.LName}}</td>
+<td>{{user.BirthDate}}</td>
+<td>{{user.Gander}}</td>
+<td>{{user.HMO}}</td>
+  </tr>
+</table>
+ <table>
+  <tr *ngIf="this.myChildren.length>0">
+    <th>Id Child</th>
+    <th>Name Child</th>
+    <th>Date Of Birth Child</th>
+  </tr>
+  <tr *ngIf="let item of myChildren">
+<td>{{item.ChildTz}}</td>
+<td>{{item.Name}}</td>
+<td>{{item.BirthDate}}</td>
+  </tr>
+</table>  -->
